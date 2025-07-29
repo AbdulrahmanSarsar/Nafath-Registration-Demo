@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>إنشاء حساب</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <style>
     body {
       background-color: #f9f9f9;
@@ -30,6 +31,10 @@
     .form-control {
       border-radius: 12px;
     }
+    .spinner {
+      display: none;
+      margin-right: 8px;
+    }
   </style>
 </head>
 <body>
@@ -38,7 +43,7 @@
 
     <div class="d-grid mb-3">
       <a href="#" class="btn btn-nafath">
-        <i class="bi bi-shield-lock"></i> تسجيل الدخول عبر نفاذ
+        <i class="bi bi-shield-lock-fill me-2"></i> تسجيل الدخول عبر نفاذ
       </a>
     </div>
 
@@ -48,24 +53,50 @@
       <h5 class="text-center">للسجيل اليدوي</h5>
       <div class="mb-3">
         <input type="text" class="form-control" id="name" placeholder="الاسم" required>
+        <div class="invalid-feedback">يرجى إدخال الاسم.</div>
       </div>
       <div class="mb-3">
         <input type="email" class="form-control" id="email" placeholder="البريد الإلكتروني" required>
+        <div class="invalid-feedback">يرجى إدخال بريد إلكتروني صحيح.</div>
       </div>
       <div class="mb-3">
         <input type="tel" class="form-control" id="phone" placeholder="رقم الجوال" pattern="05[0-9]{8}" required>
+        <div class="invalid-feedback">رقم الجوال يجب أن يبدأ بـ 05 ويتكون من 10 أرقام.</div>
       </div>
       <div class="d-grid">
-        <button type="submit" class="btn btn-primary">متابعة</button>
+        <button type="submit" class="btn btn-primary">
+          <span class="spinner-border spinner-border-sm spinner" id="spinner" role="status" aria-hidden="true"></span>
+          متابعة
+        </button>
       </div>
     </form>
   </div>
 
   <script>
-    document.getElementById("manualForm").addEventListener("submit", function(e) {
+    const form = document.getElementById("manualForm");
+    const spinner = document.getElementById("spinner");
+
+    form.addEventListener("submit", function(e) {
       e.preventDefault();
-      alert("تم التسجيل بنجاح! سيتم توجيهك الآن إلى صفحة المحتوى.");
-      window.location.href = "thankyou.html"; // صفحة وهمية للمحتوى
+      form.classList.add("was-validated");
+
+      if (!form.checkValidity()) {
+        return;
+      }
+
+      spinner.style.display = "inline-block";
+
+      // محاكاة حفظ البيانات
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const phone = document.getElementById("phone").value;
+
+      localStorage.setItem("user", JSON.stringify({ name, email, phone }));
+
+      setTimeout(() => {
+        alert("تم التسجيل بنجاح! سيتم توجيهك الآن إلى صفحة المحتوى.");
+        window.location.href = "thankyou.html";
+      }, 1000);
     });
   </script>
 </body>
